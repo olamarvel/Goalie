@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Welcome to Fun Fact Notifier</title>
+        <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Welcome to Fun Fact Notifier</h1>
+            <p>
+                This application sends you fun facts periodically as
+                notifications.
+            </p>
+            <h2>How to Use</h2>
+            <ul>
+                <li>
+                    Configure the settings on the
+                    <a href="/">Configuration Dashboard</a>.
+                </li>
+                <li>
+                    Set the notification interval, API key, and other
+                    preferences.
+                </li>
+                <li>
+                    Click "Save Configuration" to start receiving notifications.
+                </li>
+                <li>To start/stop/restart the app, use the provided buttons in the dashboard.</li>
+                <li>
+                    You can get your Api key from
+                    <a href="https://api-ninjas.com/register" target="_blank">
+                        Api ninjas</a
+                    >
+                </li>
+                <li>
+                    Don't worry you won't be charged and the app is configurd to
+                    use the barest minimum request
+                </li>
+            </ul>
+            <button onclick="restartServer()">Restart Server</button>
+            <button onclick="pauseServer()">Pause Server</button>
+            <button onclick="shutdownServer()">Shutdown Server</button>
+        </div>
+        <script>
+            async function restartServer() {
+                const response = await fetch('/restart', { method: 'POST' });
+                if (response.ok) {
+                    alert('Server restarted successfully.');
+                } else {
+                    alert('Failed to restart server.');
+                }
+            }
+
+            async function pauseServer() {
+                const response = await fetch('/pause', { method: 'POST' });
+                if (response.ok) {
+                    alert('Server paused successfully.');
+                } else {
+                    alert('Failed to pause server.');
+                }
+            }
+
+            async function shutdownServer() {
+                const response = await fetch('/shutdown', { method: 'POST' });
+                if (response.ok) {
+                    alert('Server shutdown successfully.');
+                    document.body.innerHTML =
+                        'To contiune using receiving notification please relaunch application';
+                } else {
+                    alert('Failed to shutdown server.');
+                }
+            }
+        </script>
+    </body>
+</html>

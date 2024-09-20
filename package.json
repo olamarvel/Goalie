@@ -1,0 +1,37 @@
+{
+  "name": "funfacts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "pkg --targets node16-win-x64 --out-path dist --icon public/logo.ico .",
+    "dev": "nodemon index.js"
+  },
+  "bin": "./index.js",
+  "pkg": {
+    "assets": [
+      "public/*", 
+      "server.js",
+      "modules/*"
+    ],
+    "scripts": "scripts/*"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Displays random fact to ensure you learn passively",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.0",
+    "fs": "^0.0.1-security",
+    "node-cron": "^3.0.3",
+    "node-notifier": "^10.0.1",
+    "open": "^10.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.5",
+    "pkg": "^5.8.1"
+  }
+}
