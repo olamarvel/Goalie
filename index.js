@@ -1,61 +1,54 @@
-import { fileURLToPath } from 'url';
-import { loadConfig } from './modules/config.js';
-import { notifier } from './modules/notifier.js';
-import {
-    getFact,
-    getRandomSavedFact,
-    saveFact,
-} from './modules/factFetcher.js';
-import {
-    startCronJob,
-    pauseCronJob,
-    shutdownServer,
-} from './modules/cronManager.js';
-import open from 'open';
-import { server } from './server.js';
-import nodeNotifier from 'node-notifier';
-import { secondsToCron } from './modules/utils.js';
+const { loadConfig } = require('./modules/config');
+const { notifier } = require('./modules/notifier');
+const { getFact, getRandomSavedFact, saveFact } = require('./modules/factFetcher');
+const openurl = require('openurl');
+const { startCronJob, stopCronJob, shutdownServer, setNewInterval } = require('./modules/cronManager');
+const { secondsToCron } = require('./modules/utils');
+const { server } = require('./server');
+
+const fs = require("fs");
+const path = require('path');
+
+const logFile = path.join(__dirname, 'log.txt');
+const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+
+logStream.write(`Starting application at ${new Date().toISOString()}\n`);
+
+process.on('uncaughtException', (err) => {
+    logStream.write(`Uncaught Exception: ${err.stack}\n`);
+});
+
+process.on('exit', (code) => {
+    logStream.write(`Process exited with code: ${code}\n`);
+});
 
 const config = loadConfig();
 
-const {
-    apiKey: API_KEY,
-    cacheAmount,
-} = config;
+const { apiKey: API_KEY, cacheAmount } = config;
 
 if (!API_KEY) {
     notifier('No API key detected, kindly configure', true);
-    open('http://localhost:50805');
+    openurl.open('http://localhost:50805');
 }
 
-nodeNotifier.on('pause', pauseCronJob);
-nodeNotifier.on('shutdown', () => {
-    shutdownServer(server);
-});
-nodeNotifier.on('configure', configureSetting);
-
-async function configureSetting() {
-    notifier(
-        'Got it! You would like to configure the application. Redirecting you in 3 seconds...',
-        true
-    );
-    setTimeout(async () => {
-        await open('http://localhost:50805');
-        console.log('Successfully opened');
-    }, 3000);
-}
-
-export async function main() {
+async function main() {
     let fact;
     if (Math.random() <= (config.rateOfFetching || 0.5)) {
         fact = await getFact(API_KEY);
         saveFact(fact, cacheAmount);
-    } else fact = getRandomSavedFact();
+    } else {
+        fact = getRandomSavedFact();
+    }
     if (!fact) {
-        notifier('Unable to fetch a new Fact, try checking your internet connection or checking your api key',true);
+        notifier('Unable to fetch a new Fact, try checking your internet connection or checking your api key', true);
         return;
     }
 
     const { response } = await notifier(fact, false);
     console.log(response, 'first');
 }
+
+logStream.write(`Application is running at ${new Date().toISOString()}\n`);
+startCronJob(secondsToCron(config.interval || 60), main);
+
+module.exports = { main };
