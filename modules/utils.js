@@ -1,4 +1,4 @@
-export function isDifferenceMoreThanAWeek(date1, date2) {
+function isDifferenceMoreThanAWeek(date1, date2) {
     const time1 = new Date(date1).getTime();
     const time2 = new Date(date2).getTime();
     const differenceInMilliseconds = Math.abs(time1 - time2);
@@ -6,7 +6,7 @@ export function isDifferenceMoreThanAWeek(date1, date2) {
     return differenceInWeeks > 1;
 }
 
-export function secondsToCron(seconds) {
+function secondsToCron(seconds) {
     if (isNaN(seconds) || seconds < 1) {
         throw new Error('Seconds must be a positive number.');
     }
@@ -25,7 +25,7 @@ export function secondsToCron(seconds) {
     }
 }
 
-export function shutdown(server) {
+function shutdown(server) {
     console.log('Shutting down server...');
     server.close(() => {
         console.log('Server closed');
@@ -38,3 +38,5 @@ export function shutdown(server) {
         process.exit(1);
     }, 5000);
 }
+
+module.exports = {shutdown,secondsToCron,isDifferenceMoreThanAWeek}

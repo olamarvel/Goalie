@@ -1,10 +1,11 @@
-import axios from 'axios';
-import fs from 'fs';
-import { isDifferenceMoreThanAWeek } from './utils.js';
+const fs = require('fs');
+const path = require('path');
+const { default: axios } = require('axios');
 
-const FILE_PATH = 'facts.json';
+const FILE_PATH = path.resolve(__dirname, 'facts.json');
 
-export async function getFact(API_KEY) {
+
+async function getFact(API_KEY) {
     try {
         const response = await axios.get('https://api.api-ninjas.com/v1/facts', {
             headers: { 'X-Api-Key': API_KEY },
@@ -16,11 +17,12 @@ export async function getFact(API_KEY) {
         return response.data[0].fact;
     } catch (error) {
         console.error('Error fetching fact:', error.message);
+        console.error(error)
         return null;
     }
 }
 
-export function saveFact(fact, cacheAmount) {
+function saveFact(fact, cacheAmount) {
     if (!fs.existsSync(FILE_PATH)) {
         fs.writeFileSync(FILE_PATH, JSON.stringify([]));
     }
@@ -47,7 +49,7 @@ export function saveFact(fact, cacheAmount) {
  * Get a random fact from the saved facts in the JSON file.
  * @returns {string|null} - A random fact or null if no facts are available.
  */
-export function getRandomSavedFact() {
+function getRandomSavedFact() {
     try {
         if (!fs.existsSync(FILE_PATH)) {
             console.error('Facts file does not exist.');
@@ -67,3 +69,5 @@ export function getRandomSavedFact() {
         return null;
     }
 }
+
+module.exports = { getFact, getRandomSavedFact, saveFact };

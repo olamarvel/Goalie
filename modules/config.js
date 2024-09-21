@@ -1,17 +1,20 @@
-import fs from 'fs';
+const fs = require('fs');
+const path = require('path');
 
-const CONFIG_PATH = 'config.json';
+const CONFIG_PATH = path.resolve(__dirname, '../config.json');
 
-export function loadConfig() {
+const loadConfig = () => {
     if (fs.existsSync(CONFIG_PATH)) {
         return JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
     }
     return {
         interval: 60,
-        apiKey: undefined,
+        apiKey: 'your-api-key',
         schedule: '* * * * *',
         factType: 'general',
         cacheAmount: 10,
         rateOfFetching: 10
     };
-}
+};
+
+module.exports = { loadConfig };
