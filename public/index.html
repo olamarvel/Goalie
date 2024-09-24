@@ -27,7 +27,7 @@
                 const response = await fetch(`/${action}`, { method: 'POST' });
                 const result = await response.text();
                 alert(result);
-                if ((action = 'shutdown'))
+                if (action === 'shutdown')
                     document.body.innerHTML =
                         'To contiune using receiving notification please relaunch application';
             }
@@ -55,11 +55,11 @@
                     id="schedule"
                     name="schedule"
                     placeholder="* * * * *"
-                    required
+                    disabled
                 />
 
                 <label for="factType">Type of Facts:</label>
-                <select id="factType" name="factType">
+                <select id="factType" name="factType" disabled>
                     <option value="general">General</option>
                     <option value="science">Science</option>
                     <option value="history">History</option>
@@ -74,7 +74,9 @@
                     required
                 />
 
-                <label for="rateOfFetching">Rate of Fetching (between 0 - 1):</label>
+                <label for="rateOfFetching"
+                    >Rate of Fetching (between 0 - 1):</label
+                >
                 <input
                     type="range"
                     id="rateOfFetching"
