@@ -4,10 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "pkg --targets node16-win-x64 --out-path dist --icon public/logo.ico .",
-    "dev": "nodemon index.js"
-  },
-  "bin": "./index.js",
+        "prepackPkg": "pkg --targets node16-win-x64 --out-path dist .",
+        "dev": "nodemon index.js",
+        "prepackResEdit": "resedit --in dist/funfacts.exe --out dist/Fun_Fact_Notifer.exe --icon 1,dist/logo.ico --product-name \"Fun Fact Notifer\" --product-version \"1.0.0.0\" --company-name \"OLAMARVEL\" --no-grow",
+        "build": "npm run prepackPkg & npm run prepackResEdit"
+    },
   "pkg": {
     "assets": [
       "public/*",
