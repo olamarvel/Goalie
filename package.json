@@ -1,16 +1,16 @@
 {
-  "name": "funfacts",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
+    "name": "funfacts",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
         "prepackPkg": "pkg --targets node16-win-x64 --out-path dist .",
         "dev": "nodemon index.js",
         "prepackResEdit": "resedit --in dist/funfacts.exe --out dist/Fun_Fact_Notifer.exe --icon 1,dist/logo.ico --product-name \"Fun Fact Notifer\" --product-version \"1.0.0.0\" --company-name \"OLAMARVEL\" --no-grow",
         "build": "npm run prepackPkg & npm run prepackResEdit"
     },
-  "pkg": {
-    "assets": [
+    "pkg": {
+        "assets": [
             "public/**/*"
         ],
         "scripts": [
@@ -29,23 +29,22 @@
         }
     },
     "bin": "./index.js",
-  "type": "commonjs",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "Displays random fact to ensure you learn passively",
-  "dependencies": {
-    "axios": "^1.7.7",
-    "body-parser": "^1.20.3",
-    "express": "^4.21.0",
-    "fs": "^0.0.1-security",
-    "node-cron": "^3.0.3",
+    "type": "commonjs",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "Displays random fact to ensure you learn passively",
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "express": "^4.21.0",
+        "fs": "^0.0.1-security",
+        "node-cron": "^3.0.3",
         "node-fetch": "^2.7.0",
-    "node-notifier": "^10.0.1",
-    "openurl": "^1.1.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.5",
-    "pkg": "^5.8.1"
-  }
+        "node-notifier": "^10.0.1",
+        "openurl": "^1.1.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.5",
+        "pkg": "^5.8.1"
+    }
 }
