@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="index.css" />
+        <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+        <title>Goalie Subscribed Matches</title>
+    </head>
+    <body class="bg-gray-100 p-2 flex flex-col gap-4">
+        <nav
+            class="bg-white shadow row-span-2 w-full max-w-screen-lg mx-auto rounded-lg"
+        >
+            <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between">
+                <h1 class="text-xl font-bold">Subscribed Matches</h1>
+                <a href="index.html" class="text-blue-500">Home</a>
+            </div>
+        </nav>
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 max-w-screen-lg w-full mx-auto"
+            id="subscribedMatchCards"
+        >
+            <!-- Subscribed Match Cards will be injected here -->
+        </div>
+        <script>
+            async function fetchSubscribedMatches() {
+                const response = await fetch('/subscribedMatches'); // Assume this endpoint returns subscribed matches
+                const matches = await response.json();
+                const subscribedMatchCardsContainer = document.getElementById(
+                    'subscribedMatchCards'
+                );
+
+                matches.forEach(match => {
+                    const card = document.createElement('div');
+                    card.innerHTML =
+                        `
+                    <div class="bg-white rounded-lg shadow-md p-4 relative">
+                        <button onclick="openSettings('${match.matchId}')" class="text-gray-500 hover:text-blue-500 absolute top-0 right-0">⚙️</button>
+                        <div class="flex justify-between items-center">
+                            <img src="https://images.fotmob.com/image_resources/logo/teamlogo/${match.home.id}_small.png" alt="${match.home.name} logo" class="w-10 h-10">
+                            <h2 class="font-medium">${match.home.name} vs ${match.away.name}</h2>
+                            <img src="https://images.fotmob.com/image_resources/logo/teamlogo/${match.away.id}_small.png" alt="${match.home.name} logo" class="w-10 h-10">
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <p>Status: ${match.status}</p>
+                            <button onclick="unsubscribeMatch('${match.matchId}')" class="bg-red-500 text-white px-4 rounded mt-2">Unsubscribe</button>
+                        </div>
+                    </div>
+                `;
+                    subscribedMatchCardsContainer.appendChild(card);
+                });
+            }
+
+            async function unsubscribeMatch(matchId) {
+                try {
+                    const response = await fetch(`/unsubscribeMatch/${matchId}`, {
+                        method: 'POST',
+                    });
+                    if (response.ok) {
+                        alert('Match unsubscribed successfully');
+                        location.reload(); // Reload the page to update the list of subscribed matches
+                    } else {
+                        alert('Failed to unsubscribe from match');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while trying to unsubscribe');
+                }
+            }
+
+            function openSettings(matchId) {
+                window.location.href = `settings.html?matchId=${matchId}`; // Navigate to settings page
+            }
+
+            fetchSubscribedMatches(); // Fetch subscribed matches on page load
+        </script>
+    </body>
+</html>
