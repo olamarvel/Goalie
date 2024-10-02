@@ -3,6 +3,7 @@ const { notifier } = require('./notifier');
 const { shutdown } = require('./utils');
 const { loadConfig } = require('./config');
 const { secondsToCron } = require('./utils');
+const { checkForMatchUpdates } = require('./matchUpdater');
 
 let job;
 let config = loadConfig();
@@ -15,7 +16,7 @@ function pauseCronJob() {
     }
 }
 
-function restartCronJob(main) {
+function restartCronJob(main) { 
     if (job) {
         job.start();
         console.log('Cron job restarted');
@@ -34,12 +35,11 @@ function shutdownServer(server) {
     }, 5000);
 }
 
-function startCronJob(schedule, main) {
-    job = cron.schedule(schedule, () => {
-        console.log('Running the task based on the interval');
-        main();
+function startCronJob(schedule, ) {
+    cronJob = cron.schedule(schedule, async () => {
+        console.log('Checking for match updates...');
+        await checkForMatchUpdates();
     });
-    job.start();
 }
 
 module.exports = { pauseCronJob, restartCronJob, startCronJob, shutdownServer };
