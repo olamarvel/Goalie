@@ -127,3 +127,6 @@ notes
 resources.resources
 facts.json
 log.txt
+notes.txt
+public/index.css
+db.json
