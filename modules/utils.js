@@ -2,7 +2,8 @@ function isDifferenceMoreThanAWeek(date1, date2) {
     const time1 = new Date(date1).getTime();
     const time2 = new Date(date2).getTime();
     const differenceInMilliseconds = Math.abs(time1 - time2);
-    const differenceInWeeks = differenceInMilliseconds / (1000 * 60 * 60 * 24 * 7);
+    const differenceInWeeks =
+        differenceInMilliseconds / (1000 * 60 * 60 * 24 * 7);
     return differenceInWeeks > 1;
 }
 
@@ -39,4 +40,32 @@ function shutdown(server) {
     }, 5000);
 }
 
-module.exports = {shutdown,secondsToCron,isDifferenceMoreThanAWeek}
+function formatDateToRegex(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}${month}${day}`;
+}
+
+async function Sleep(time = 3000, fn) {
+    return new Promise((resolve, reject) => {
+        if (typeof time !== 'number') {
+            reject('invalid time');
+            return;
+        }
+        setTimeout(() => {
+            if (fn) {
+                resolve(fn());
+            } else resolve(true);
+        }, time);
+    });
+}
+
+module.exports = {
+    shutdown,
+    secondsToCron,
+    isDifferenceMoreThanAWeek,
+    formatDateToRegex,
+    Sleep,
+};
