@@ -2,7 +2,7 @@ const nodeNotifier = require('node-notifier');
 const openurl = require('openurl');
 const path = require('path');
 
-async function notifier(message, withoutActions) {
+async function notifier(message, withoutActions, match) {
     return new Promise((resolve, reject) => {
         const notifier = process.pkg
             ? new nodeNotifier.WindowsToaster({
@@ -16,15 +16,19 @@ async function notifier(message, withoutActions) {
 
         notifier.notify(
             {
-                'app-name': 'Fun fact Notifier by Olamarvel',
-                title: withoutActions ? 'Info' : 'Here is a fun fact for you.',
+                'app-name': 'Goalie by Olamarvel',
+                title: withoutActions
+                    ? 'Info'
+                    : match ? `latest update for the match ${match.home} vs ${match.away}` : 'Goalie by Olamarvel',
                 subtitle: 'created by Olamarvel',
                 message,
                 sound: true,
                 icon: path.join(__dirname, '../public/logo.png'),
                 timeout: 10,
                 closeLabel: 'close',
-                actions: withoutActions ? undefined : ['pause', 'shutdown', 'configure'],
+                actions: withoutActions
+                    ? undefined
+                    : ['pause', 'shutdown', 'configure'],
                 dropdownLabel: 'control',
             },
             (error, response, metadata) => {
